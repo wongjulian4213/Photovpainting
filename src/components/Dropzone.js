@@ -1,5 +1,7 @@
-import React, {useCallback, useMemo} from 'react';
+import React, {useCallback, useState } from 'react';
 import {useDropzone} from 'react-dropzone';
+import FormData from 'form-data';
+import axios from 'axios';
 
 import styled from 'styled-components';
 
@@ -16,12 +18,20 @@ const getColor = (props) => {
     return '#eeeeee';
   }
   
+  const Flex = styled.div`
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    
+    
+`;
+
   const Container = styled.div`
     flex: 1;
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 100px 10px 100px 10px;
     border-width: 2px;
     border-radius: 2px;
     border-color: ${props => getColor(props)};
@@ -35,34 +45,68 @@ const getColor = (props) => {
   
 
 const Dropzone = props => {
-    const onDrop = useCallback(acceptedFiles => {
+
+  const [category, setCategory] = useState(null);
+
+  const onDrop = useCallback(acceptedFiles => {
+    setCategory(null);
+      var formData = new FormData();
+      formData.append('image', acceptedFiles[0]);
+      
+
+      
+      const options = {
+        method: 'POST',
+        body: formData,
+    
+      };
+  
+      fetch('https://photovpainting.onrender.com/predict', options)
+        .then(response => response.json())
+        .then(data => {
+          setCategory(data.category.substring(0,data.category.length -1));
+        })
+
+
+    });
 
     
-    }, [])
-    const {acceptedFiles, isDragAccept, isDragReject, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: 'image/*'})
+    const {acceptedFiles, fileRejections, isDragAccept, isDragReject, getRootProps, getInputProps, isDragActive} = useDropzone({onDrop, accept: 'image/jpeg, image/png'})
 
-    const files = acceptedFiles.map(file => (
+    const acceptedFileItems = acceptedFiles.map(file => (
         <li key={file.path}>
-          {file.path} - {file.size} bytes
+          {file.path}
         </li>
       ));
 
+    const fileRejectionItems = fileRejections.map(({ file, errors }) => (
+        <li key={file.path}>
+          {file.path}
+          <ul>
+            {errors.map(e => (
+                <li key={e.code}>{e.message}</li>
+            ))}
+          </ul>
+        </li>
+      ));    
     
 
 
     return (
-        <div className="container">
-            <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
+        <div class="container">
+            <Flex>
+                <Container {...getRootProps({isDragActive, isDragAccept, isDragReject})}>
                 <input {...getInputProps()} />
-                {
-                    isDragActive ?
-                        <p>Drop the image here ...</p> :
-                        <p>Drag and drop image of photo or painting here, or click to select files</p>
-                }
-            </Container>
+                    {
+                        isDragActive ?
+                            <p>Drop the image here ...</p> :
+                            <p>Drag and drop image of photo or painting here, or click to select files</p>
+                    }
+                </Container>
+            </Flex>
             <aside>
-                <h4>Files</h4>
-                <ul>{files}</ul>
+                <ul>This is a... {category}</ul>
+                
             </aside>
         </div>
     )

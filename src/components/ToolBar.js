@@ -32,8 +32,8 @@ const ToolBar = props => {
     <nav>
         <ul class="menu">
             <li class="name"><a href="/">Photo or Painting Classifier</a></li>
-            <li class="item"><a href="http://www.github.com/wongjulian4213">Github</a></li>
-            <li class="item"><a href="mailto:wongjulian4213@gmail.com">Contact me!</a></li>
+            <li class="item"><a href="https://github.com/wongjulian4213/Photovpainting">Github</a></li>
+            <li class="item"><a href="mailto:wongjulian4213@gmail.com">Contact</a></li>
             <li class="toggle"><a href="#"><FontAwesomeIcon icon={faAlignJustify} /></a></li>
         </ul>
     </nav>

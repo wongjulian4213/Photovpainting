@@ -105,7 +105,9 @@ const Dropzone = props => {
                 </Container>
             </Flex>
             <aside>
+                <ul>Your file is... {acceptedFileItems}</ul>
                 <ul>This is a... {category}</ul>
+                <ul>Rejected items: {fileRejectionItems}</ul>
                 
             </aside>
         </div>

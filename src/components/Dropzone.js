@@ -105,7 +105,6 @@ const Dropzone = props => {
                 </Container>
             </Flex>
             <aside>
-                <h1>The api is currently not up! Instead, look at the source code for it <u><a href="https://github.com/wongjulian4213/model_api" >here</a></u></h1>
                 <ul>Your file is... {acceptedFileItems}</ul>
                 <ul>This is a... {category}</ul>
                 <ul>Rejected items: {fileRejectionItems}</ul>
